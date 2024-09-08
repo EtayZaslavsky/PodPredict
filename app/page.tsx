@@ -98,7 +98,7 @@ const Home = () => {
                         : "bg-gray-200"
                         }`}
                     >
-                      {truncateText(entry.key_factor, 4)} {/* Truncate key_factor to 4 words */}
+                      {truncateText(String(entry.key_factor), 4)} {/* Truncate key_factor to 4 words */}
                     </button>
                   </li>
                 ))}
@@ -130,8 +130,8 @@ const Home = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-700">Link:</p>
-                  <a href={selectedEntry.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-                    {selectedEntry.link}
+                  <a href={String(selectedEntry.link)} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                    hear that episode
                   </a>
                 </div>
               </div>
