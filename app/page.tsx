@@ -51,15 +51,32 @@ const Home = () => {
     return text;
   };
 
-  // Filter entries based on the selected division
-  const divisions = Array.from(new Set(data.map((entry) => entry.division))) as string[]; // Adjust 'division' key as needed
-  const filteredEntries = data.filter((entry) => entry.division === selectedDivision); // Adjust 'division' key as needed
+  // Helper function to split and normalize divisions
+  const splitDivisions = (divisions: string): string[] => {
+    if (!divisions) return [];
+    return divisions
+      .split(",")
+      .map((division) => division.trim())
+      .filter((division) => division); // Remove any empty strings
+  };
+
+  // Get unique divisions from the data
+  const divisions = Array.from(
+    new Set(data.flatMap((entry) => splitDivisions(String(entry.division))))
+  );
+
+  // Filter entries based on the selected division(s)
+  const filteredEntries = data.filter((entry) =>
+    selectedDivision
+      ? splitDivisions(String(entry.division)).includes(selectedDivision)
+      : true
+  );
 
   return (
-    <main className="flex min-h-screen flex-col p-6">
+    <main className="flex min-h-screen flex-col lg:flex-row p-6">
       <div className="flex w-full h-full">
         {/* Sidebar for Divisions and Entries */}
-        <div className="w-1/3 p-4 border-r border-gray-300">
+        <div className="w-full lg:w-1/3 p-4 border-r border-gray-300">
           {!selectedDivision ? (
             <>
               <h2 className="text-xl font-bold mb-4">Divisions</h2>
@@ -98,7 +115,8 @@ const Home = () => {
                         : "bg-gray-200"
                         }`}
                     >
-                      {truncateText(String(entry.key_factor), 4)} {/* Truncate key_factor to 4 words */}
+                      {truncateText(String(entry.key_factor), 4)}{" "}
+                      {/* Truncate key_factor to 4 words */}
                     </button>
                   </li>
                 ))}
@@ -108,7 +126,7 @@ const Home = () => {
         </div>
 
         {/* Main Content Area for Card */}
-        <div className="w-2/3 p-4">
+        <div className="w-full lg:w-2/3 p-4">
           {isLoading ? (
             <p>Loading CSV data...</p>
           ) : selectedEntry ? (
@@ -125,12 +143,18 @@ const Home = () => {
                   <p className="text-gray-900">{selectedEntry.quote}</p>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-700">Start Timestamp:</p>
-                  <p className="text-gray-900">{selectedEntry.start_timestamp}</p>
+                  <p className="font-semibold text-gray-700">Timestamp:</p>
+                  <p className="text-gray-900">{selectedEntry.timestamp_duration
+                  }</p>
                 </div>
                 <div>
                   <p className="font-semibold text-gray-700">Link:</p>
-                  <a href={String(selectedEntry.link)} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                  <a
+                    href={String(selectedEntry.link)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
                     hear that episode
                   </a>
                 </div>
