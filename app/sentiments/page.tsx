@@ -53,12 +53,12 @@ const Home = () => {
     <main className="flex min-h-screen flex-col lg:flex-row p-6 overflow-y-none">
       <div className="flex w-full h-full">
         {/* Sidebar for Divisions and Entries */}
-        <div className="fixed w-full lg:w-1/3 overflow-y-scroll">
+        {/* <div className="fixed w-full lg:w-1/3 overflow-y-scroll">
           <Sidebar data={data as CsvData[]} handleDivisionClick={setSelectedDivision}></Sidebar>
-        </div>
+        </div> */}
 
         {/* Main Content Area for Card */}
-        <div className="ml-[20%]">
+        <div>
           <Panel entries={filteredEntries} />
         </div>
 
