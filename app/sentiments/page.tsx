@@ -58,9 +58,7 @@ const Home = () => {
         </div> */}
 
         {/* Main Content Area for Card */}
-        <div>
-          <Panel entries={filteredEntries} />
-        </div>
+        <Panel entries={filteredEntries} />
 
       </div>
     </main >

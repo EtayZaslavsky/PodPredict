@@ -1,5 +1,5 @@
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { CsvData } from "../utils/loadCSV";
 import { Entry } from "./entry";
 
@@ -19,7 +19,6 @@ export default function EntriesList({ entries }: EntriesProps) {
 
         let filtered = entries;
 
-        console.log({ from, to, company });
         // Filter by date range if from and to are present
         if (from) {
             const fromDate = new Date(from).getTime();
@@ -46,14 +45,16 @@ export default function EntriesList({ entries }: EntriesProps) {
     }, [searchParams, entries]);
 
     return (
-        <div>
-            <div className="overflow-y-scroll">
-                {filteredEntries
-                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                    .map((entry, index) => (
-                        <Entry key={String(index)} entry={entry} />
-                    ))}
+        <Suspense fallback={<div>Loading...</div>}>
+            <div className="justify-center w-full flex">
+                <div className="overflow-y-scroll max-w-2xl">
+                    {filteredEntries
+                        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                        .map((entry, index) => (
+                            <Entry key={String(index)} entry={entry} />
+                        ))}
+                </div>
             </div>
-        </div>
+        </Suspense>
     );
 }
