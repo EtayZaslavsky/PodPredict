@@ -7,7 +7,7 @@ interface EntriesProps {
     entries: CsvData[];
 }
 
-export default function EntriesList({ entries }: EntriesProps) {
+export function EntriesList({ entries }: EntriesProps) {
     const searchParams = useSearchParams();
     const [filteredEntries, setFilteredEntries] = useState<CsvData[]>([]);
 
@@ -45,16 +45,32 @@ export default function EntriesList({ entries }: EntriesProps) {
     }, [searchParams, entries]);
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <div className="justify-center w-full flex">
-                <div className="overflow-y-scroll max-w-2xl">
-                    {filteredEntries
-                        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                        .map((entry, index) => (
-                            <Entry key={String(index)} entry={entry} />
-                        ))}
-                </div>
+        <div className="justify-center w-full flex">
+            <div className="overflow-y-scroll max-w-2xl">
+                {filteredEntries
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .map((entry, index) => (
+                        <Entry key={String(index)} entry={entry} />
+                    ))}
             </div>
+        </div>
+    );
+}
+
+function SuspendedEntriesList() {
+    return (
+        <div className="justify-center w-full flex">
+            <div className="overflow-y-scroll max-w-2xl">
+                <div>Loading...</div>
+            </div>
+        </div>
+    );
+}
+
+export default function Entries({ entries }: EntriesProps) {
+    return (
+        <Suspense fallback={<SuspendedEntriesList />}>
+            <EntriesList entries={entries} />
         </Suspense>
     );
 }
