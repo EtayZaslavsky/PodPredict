@@ -25,7 +25,7 @@ export const Entry = ({ entry }: { entry: CsvData }) => {
 
                 <button
                     onClick={handleToggleSource}
-                    className="text-black border border-black underline p-2 text-xs rounded-md hover:bg-black hover:text-white focus:outline-none"
+                    className="text-black border mb-4 border-black underline p-2 text-xs rounded-md hover:bg-black hover:text-white focus:outline-none"
                 >
                     {showSource ? 'Hide Source' : 'View Source'}
                 </button>

@@ -1,13 +1,19 @@
-import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
-import { CsvData } from "../utils/loadCSV";
-import { Entry } from "./entry";
+"use client";
 
-interface EntriesProps {
-    entries: CsvData[];
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { CsvData } from "../../utils/loadCSV";
+import { useEffect, useState } from "react";
+import { useSearchParams } from 'next/navigation';
+
+// Register the ArcElement for Doughnut charts and other necessary plugins
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+type EntriesProps = {
+    entries: CsvData[]
 }
 
-export function EntriesList({ entries }: EntriesProps) {
+export default function Graph({ entries }: EntriesProps) {
     const searchParams = useSearchParams();
     const [filteredEntries, setFilteredEntries] = useState<CsvData[]>([]);
 
@@ -44,33 +50,15 @@ export function EntriesList({ entries }: EntriesProps) {
         setFilteredEntries(filtered);
     }, [searchParams, entries]);
 
-    return (
-        <div className="justify-center w-full flex">
-            <div className="max-w-2xl">
-                {filteredEntries
-                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                    .map((entry, index) => (
-                        <Entry key={String(index)} entry={entry} />
-                    ))}
-            </div>
-        </div>
-    );
-}
+    const chartData = {
+        datasets: [{
+            label: 'Dataset 1',
+            data: entries.map(entry => entry.sentiment_score * 10),
+            backgroundColor: '#ff0000',
+        }],
+    };
 
-function SuspendedEntriesList() {
     return (
-        <div className="justify-center w-full flex">
-            <div className="overflow-y-scroll max-w-2xl">
-                <div>Loading...</div>
-            </div>
-        </div>
-    );
-}
-
-export default function Entries({ entries }: EntriesProps) {
-    return (
-        <Suspense fallback={<SuspendedEntriesList />}>
-            <EntriesList entries={entries} />
-        </Suspense>
+        <Doughnut data={chartData} />
     );
 }

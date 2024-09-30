@@ -6,3 +6,4 @@ export const splitDivisions = (divisions: string): string[] => {
         .map((division) => division.trim())
         .filter((division) => division); // Remove any empty strings
 };
+

@@ -9,9 +9,7 @@ import Panel from "@/components/panel";
 
 const Home = () => {
   const [data, setData] = useState<CsvData[]>([]);
-  const [selectedEntry, setSelectedEntry] = useState<CsvData | null>(null);
   const [selectedDivision, setSelectedDivision] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,26 +18,11 @@ const Home = () => {
         setData(csvData);
       } catch (error) {
         console.error("Error loading CSV:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
-
-  // Function to handle entry selection
-  const handleEntryClick = (entry: CsvData) => {
-    setSelectedEntry(entry);
-  };
-
-
-  // Function to handle back button click
-  const handleBackClick = () => {
-    setSelectedDivision(null);
-    setSelectedEntry(null);
-  };
-
 
 
   // Filter entries based on the selected division(s)
